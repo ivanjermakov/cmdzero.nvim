@@ -1,6 +1,6 @@
 local M = {}
 
-M.ns = vim.api.nvim_create_namespace("messages_highlights")
+M.ns = vim.api.nvim_create_namespace("cmdzero")
 
 ---@class Config
 M.defaults = {
