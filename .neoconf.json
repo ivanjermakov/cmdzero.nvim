@@ -1,9 +1,0 @@
-{
-  "lua-dev": {
-    "library": {
-      "plugins": [
-        "nui.nvim"
-      ]
-    }
-  }
-}
