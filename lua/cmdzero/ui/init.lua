@@ -1,5 +1,5 @@
-local Config = require("noice.config")
-local Util = require("noice.util")
+local Config = require("cmdzero.config")
+local Util = require("cmdzero.util")
 
 local M = {}
 
@@ -45,7 +45,7 @@ function M.handle(event, ...)
 	local event_group, event_type = event:match("([a-z]+)_(.*)")
 	local on = "on_" .. event_type
 
-	local ok, handler = pcall(require, "noice.ui." .. event_group)
+	local ok, handler = pcall(require, "cmdzero.ui." .. event_group)
 	if not (ok and type(handler[on]) == "function") then
 		if Config.options.debug then
 			Util.error("No ui handlers for **" .. event .. "** events\n```lua\n" .. vim.inspect({ ... }) .. "\n```")

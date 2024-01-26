@@ -1,4 +1,4 @@
-local Handlers = require("noice.handlers")
+local Handlers = require("cmdzero.handlers")
 
 local M = {}
 
@@ -35,7 +35,7 @@ end
 
 function M.on_confirm()
 	-- detach and reattach on the next schedule, so the user can do the confirmation
-	local ui = require("noice.ui")
+	local ui = require("cmdzero.ui")
 	ui.detach()
 	vim.schedule(function()
 		ui.attach()

@@ -1,5 +1,5 @@
-local Config = require("noice.config")
-local Handlers = require("noice.handlers")
+local Config = require("cmdzero.config")
+local Handlers = require("cmdzero.handlers")
 
 local M = {}
 
@@ -51,7 +51,7 @@ function M.on_show(event, content, pos, firstc, prompt, indent, level)
 	})
 	if not vim.deep_equal(c, M.cmdlines[level]) then
 		if firstc == "/" or firstc == "?" then
-			require("noice.hacks").fix_incsearch(true)
+			require("cmdzero.hacks").fix_incsearch(true)
 		end
 		M.cmdlines[level] = c
 		M.update()
@@ -60,7 +60,7 @@ end
 
 function M.on_hide(_, level)
 	M.cmdlines[level] = nil
-	require("noice.hacks").fix_incsearch(false)
+	require("cmdzero.hacks").fix_incsearch(false)
 	M.update()
 end
 

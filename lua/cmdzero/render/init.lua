@@ -1,5 +1,5 @@
-local Highlight = require("noice.highlight")
-local Config = require("noice.config")
+local Highlight = require("cmdzero.highlight")
+local Config = require("cmdzero.config")
 local NuiLine = require("nui.line")
 
 local M = {}
@@ -107,7 +107,7 @@ end
 
 setmetatable(M, {
 	__index = function(_, key)
-		return require("noice.render." .. key)
+		return require("cmdzero.render." .. key)
 	end,
 })
 

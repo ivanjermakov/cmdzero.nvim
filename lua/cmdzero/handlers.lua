@@ -1,6 +1,6 @@
-local Highlight = require("noice.highlight")
-local Config = require("noice.config")
-local Render = require("noice.render")
+local Highlight = require("cmdzero.highlight")
+local Config = require("cmdzero.config")
+local Render = require("cmdzero.render")
 
 local M = {}
 
@@ -38,7 +38,7 @@ function M.add(handler)
 			local hid = id({ event = event, kind = kind })
 
 			local opts = vim.deepcopy(handler.opts or {})
-			opts.title = opts.title or "Noice"
+			opts.title = opts.title or "cmdzero"
 			if Config.options.debug then
 				opts.title = opts.title .. " (" .. hid .. ")"
 			end
