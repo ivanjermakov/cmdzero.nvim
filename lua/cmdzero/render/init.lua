@@ -1,6 +1,7 @@
-local Highlight = require("cmdzero.highlight")
-local Config = require("cmdzero.config")
-local NuiLine = require("nui.line")
+local highlight = require("cmdzero.highlight")
+local config = require("cmdzero.config")
+local log = require("cmdzero.log")
+local nui_line = require("nui.line")
 
 local M = {}
 
@@ -34,6 +35,7 @@ end
 
 function Renderer:render()
     if self.dirty then
+        log.info("render", self)
         local ok, err = pcall(self._render, self)
         if not ok then
             vim.notify(err, "error", { title = "Messages" })
@@ -50,9 +52,9 @@ function Renderer:render_buf(buf, opts)
     opts = opts or {}
     for l, line in ipairs(self.lines) do
         if opts.highlights_only then
-            line:highlight(buf, Config.ns, l + (opts.offset or 0))
+            line:highlight(buf, config.ns, l + (opts.offset or 0))
         else
-            line:render(buf, Config.ns, l + (opts.offset or 0))
+            line:render(buf, config.ns, l + (opts.offset or 0))
         end
     end
 end
@@ -78,11 +80,11 @@ function Renderer:add(chunks)
     self.dirty = true
     for _, chunk in ipairs(chunks) do
         local attr_id, text = unpack(chunk)
-        local hl = Highlight.get_hl(attr_id)
+        local hl = highlight.get_hl(attr_id)
 
         local function append(l)
             if #self.lines == 0 then
-                table.insert(self.lines, NuiLine())
+                table.insert(self.lines, nui_line())
             end
             local line = self.lines[#self.lines]
             line:append(l, hl)
@@ -93,7 +95,7 @@ function Renderer:add(chunks)
             if nl then
                 local str = text:sub(1, nl - 1)
                 append(str)
-                table.insert(self.lines, NuiLine())
+                table.insert(self.lines, nui_line())
                 text = text:sub(nl + 1)
             else
                 append(text)
