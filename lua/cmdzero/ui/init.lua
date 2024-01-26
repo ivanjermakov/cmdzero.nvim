@@ -27,7 +27,7 @@ function M.setup()
         group = group,
         callback = function()
             M.detach()
-            vim.cmd([[redraw]])
+            vim.cmd("redraw")
         end,
     })
 

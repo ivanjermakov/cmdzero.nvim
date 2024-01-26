@@ -23,12 +23,15 @@ M.on_show = function(event, kind, content, replace_last)
         return vim.api.nvim_input("<cr>")
     end
     if kind == "confirm" then
-        return M.on_confirm()
+        M.return_control()
+        return
     end
     queue.queue({ event = event, kind = kind, chunks = content, clear = replace_last })
 end
 
-M.on_confirm = function()
+M.on_confirm = M.return_control
+
+M.return_control = function()
     -- detach and reattach on the next schedule, so the user can do the confirmation
     local ui = require("cmdzero.ui")
     ui.detach()
@@ -38,7 +41,7 @@ M.on_confirm = function()
 end
 
 M.on_history_show = function(event, entries)
-    -- TODO: show history in sep buffer
+    -- TODO: show history in a separate buffer
 end
 
 return M
