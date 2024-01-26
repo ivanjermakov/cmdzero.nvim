@@ -1,15 +1,8 @@
-local highlight = require("cmdzero.highlight")
 local config = require("cmdzero.config")
 local log = require("cmdzero.log")
 local nui_line = require("nui.line")
 
 local M = {}
-
----@class Highlight
----@field hl string
----@field line number
----@field from number
----@field to number
 
 ---@alias RenderFunc fun(renderer: Renderer, clear?: boolean)
 
@@ -51,11 +44,7 @@ end
 function Renderer:render_buf(buf, opts)
     opts = opts or {}
     for l, line in ipairs(self.lines) do
-        if opts.highlights_only then
-            line:highlight(buf, config.ns, l + (opts.offset or 0))
-        else
-            line:render(buf, config.ns, l + (opts.offset or 0))
-        end
+        line:render(buf, config.ns, l + (opts.offset or 0))
     end
 end
 
@@ -80,14 +69,13 @@ function Renderer:add(chunks)
     self.dirty = true
     for _, chunk in ipairs(chunks) do
         local attr_id, text = unpack(chunk)
-        local hl = highlight.get_hl(attr_id)
 
         local function append(l)
             if #self.lines == 0 then
                 table.insert(self.lines, nui_line())
             end
             local line = self.lines[#self.lines]
-            line:append(l, hl)
+            line:append(l)
         end
 
         while text ~= "" do
