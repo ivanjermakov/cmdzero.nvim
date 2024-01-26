@@ -33,7 +33,7 @@ function M.run()
                 handler:add(message.chunks)
             end
         else
-            log.warn("no handler for message", message)
+            log.debug("no handler for message", message)
         end
     end
     for _, r in pairs(M.handlers) do
@@ -44,7 +44,7 @@ end
 
 ---@param message { event: string, kind?: string, chunks: table}
 function M.queue(message)
-    log.info("queue", message)
+    log.debug("queue", message)
     table.insert(M._queue, message)
 end
 

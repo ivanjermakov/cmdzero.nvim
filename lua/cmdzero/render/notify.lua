@@ -1,7 +1,11 @@
+local log = require("cmdzero.log")
+
 ---@param renderer Renderer
 return function(renderer)
     local text = renderer:get_text()
     local level = renderer.opts.level or "info"
+
+    log.debug("render notify", text)
 
     renderer.notif = require("notify")(text, level, {
     	title = renderer.opts.title or "Foo",

@@ -46,10 +46,10 @@ function M.handle(event, ...)
 
     local ok, handler = pcall(require, "cmdzero.ui." .. event_group)
     if ok and type(handler[on]) == "function" then
-        log.info("handler", event_group, event_type, event, ...)
+        log.debug("handler", event, ...)
         handler[on](event, ...)
     else
-        log.warn("no handler for", event_group, event_type, event, ...)
+        log.debug("no handler for", event_group, event_type, event, ...)
     end
 end
 

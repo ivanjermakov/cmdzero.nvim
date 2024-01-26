@@ -28,7 +28,7 @@ end
 
 function Renderer:render()
     if self.dirty then
-        log.info("render", self)
+        log.debug("render", self)
         local ok, err = pcall(self._render, self)
         if not ok then
             vim.notify(err, "error", { title = "Messages" })
@@ -51,10 +51,7 @@ end
 function Renderer:get_text()
     return table.concat(
         vim.tbl_map(
-        ---@param l NuiLine
-            function(l)
-                return l:content()
-            end,
+            function(l) return l:content() end,
             self.lines
         ),
         "\n"
