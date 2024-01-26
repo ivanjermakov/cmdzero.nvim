@@ -12,7 +12,6 @@ function M.protect(fn, msg)
 				table.insert(lines, msg)
 			end
 			table.insert(lines, err)
-			table.insert(lines, debug.traceback("", 3))
 
 			M.error(table.concat(lines, "\n"))
 			return err
@@ -26,7 +25,7 @@ end
 
 function M.notify(msg, level)
 	vim.notify(msg, level, {
-		title = "cmdzero.nvim",
+		title = "cmdzero",
 		on_open = function(win)
 			vim.api.nvim_win_set_option(win, "conceallevel", 3)
 			local buf = vim.api.nvim_win_get_buf(win)
