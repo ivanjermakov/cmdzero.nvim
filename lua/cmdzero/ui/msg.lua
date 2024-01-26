@@ -7,11 +7,11 @@ function M.on_clear()
 end
 
 function M.on_showmode(event, content)
-    -- if vim.tbl_isempty(content) then
-    --     queue.queue({ event = event, clear = true })
-    -- else
-    --     queue.queue({ event = event, chunks = content, clear = true })
-    -- end
+    if vim.tbl_isempty(content) then
+        queue.queue({ event = event, clear = true })
+    else
+        queue.queue({ event = event, chunks = content, clear = true })
+    end
 end
 
 M.on_showcmd = M.on_showmode
