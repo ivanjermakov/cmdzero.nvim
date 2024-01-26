@@ -1,25 +1,42 @@
 local Popup = require("nui.popup")
-local log = require("cmdzero.log")
 
 local M = {}
 
-M.renderer = { popup = nil }
+---@class Popup
+---@field mount function
+---@field unmount function
+---@field bufnr number
+
+---@class State
+---@field text string|nil
+---@field popup Popup|nil
+---@field active Message|nil
+M.state = { text = nil, popup = nil, active = nil }
 
 M.format = function(message)
-    log.warn("format", message.chunks)
     return message.chunks[#message.chunks][2]
 end
 
 M.render = function(message)
-    log.warn("render", message)
+    -- only clear with `msg_showmode` if active message is also `msg_showmode`
+    if message.chunks == nil and message.event == "msg_showmode" and
+        M.state.active ~= nil and M.state.active.event ~= "msg_showmode" then
+        return
+    end
 
-    M.clear()
+    if message.chunks == nil and message.clear then
+        M.clear()
+        return
+    end
 
-    if message.chunks == nil then return end
     local text = M.format(message)
     if #text == 0 then return end
 
-    M.renderer.popup = Popup({
+    if text == M.state.text then return end
+
+    M.clear()
+
+    M.state.popup = Popup({
         enter = false,
         focusable = false,
         border = { style = "none", },
@@ -27,14 +44,19 @@ M.render = function(message)
         position = { row = "100%", col = 0 },
         size = { width = #text, height = 1, }
     })
-    M.renderer.popup:mount()
-    vim.api.nvim_buf_set_lines(M.renderer.popup.bufnr, 0, 1, false, { text })
+    M.state.popup:mount()
+    vim.api.nvim_buf_set_lines(M.state.popup.bufnr, 0, 1, false, { text })
+
+    M.state.active = message
+    M.state.text = text
 end
 
 M.clear = function()
-    if M.renderer.popup then
-        log.warn("clear")
-        M.renderer.popup:unmount()
+    if M.state.popup then
+        M.state.popup:unmount()
+        M.state.text = nil
+        M.state.popup = nil
+        M.state.active = nil
     end
 end
 

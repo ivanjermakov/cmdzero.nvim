@@ -6,6 +6,7 @@ local M = {}
 M.attached = false
 
 function M.attach()
+    if M.attached then return end
     M.attached = true
     vim.ui_attach(config.ns, { ext_messages = true }, function(event, ...)
         M.handle(event, ...)
@@ -44,12 +45,11 @@ function M.handle(event, ...)
     local event_group, event_type = event:match("([a-z]+)_(.*)")
     local on = "on_" .. event_type
 
+    log.debug("handle", event, ..., on)
+
     local ok, handler = pcall(require, "cmdzero.ui." .. event_group)
     if ok and type(handler[on]) == "function" then
-        log.debug("handler", event, ...)
         handler[on](event, ...)
-    else
-        log.debug("no handler for", event_group, event_type, event, ...)
     end
 end
 

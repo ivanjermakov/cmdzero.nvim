@@ -1,6 +1,9 @@
 local render = require("cmdzero.render")
 local log = require("cmdzero.log")
 
+---@class Message
+---@field event string
+
 local M = {}
 
 function M.setup()
@@ -13,14 +16,13 @@ function M.run()
     while #M._queue > 0 do
         local message = table.remove(M._queue, 1)
 
-        if message.clear or message.event == "msg_clear" then
+        if message.event == "msg_clear" then
             render.clear()
         end
 
+        -- for some reason, msg_showmode is often send without content and it clears active message unsolicitedly
         if message.event == "msg_show" or message.event == "msg_showmode" then
-            if message.chunks then
-                render.render(message)
-            end
+            render.render(message)
         end
     end
     vim.defer_fn(M.run, 100)
