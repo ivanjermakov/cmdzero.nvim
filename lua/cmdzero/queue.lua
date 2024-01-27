@@ -3,6 +3,9 @@ local log = require("cmdzero.log")
 
 ---@class Message
 ---@field event string
+---@field kind? string
+---@field chunks? table
+---@field clear? boolean 
 
 local M = {}
 
@@ -28,7 +31,7 @@ function M.run()
     vim.defer_fn(M.run, 100)
 end
 
----@param message { event: string, kind?: string, chunks: table}
+---@param message Message
 function M.queue(message)
     log.debug("queue", message)
     table.insert(M._queue, message)
