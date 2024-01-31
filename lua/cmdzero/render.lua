@@ -1,4 +1,6 @@
 local Popup = require("nui.popup")
+local util = require("cmdzero.util")
+local log = require("cmdzero.log")
 
 local M = {}
 
@@ -8,13 +10,16 @@ local M = {}
 ---@field bufnr number
 
 ---@class State
----@field text string|nil
+---@field text string[]|nil
 ---@field popup Popup|nil
 ---@field active Message|nil
 M.state = { text = nil, popup = nil, active = nil }
 
+---@param message Message
+---@return string[]
 M.format = function(message)
-    return message.chunks[#message.chunks][2]
+    local msg = message.chunks[#message.chunks][2]
+    return util.split(msg, "\n")
 end
 
 M.render = function(message)
@@ -41,11 +46,12 @@ M.render = function(message)
         focusable = false,
         border = { style = "none", },
         relative = "editor",
-        position = { row = "100%", col = 0 },
-        size = { width = #text, height = 1, }
+        position = { row = vim.o.lines - #text, col = 0 },
+        size = { width = #text[1], height = #text }
     })
     M.state.popup:mount()
-    vim.api.nvim_buf_set_lines(M.state.popup.bufnr, 0, 1, false, { text })
+    log.info("text", text)
+    vim.api.nvim_buf_set_lines(M.state.popup.bufnr, 0, 1, false, text)
 
     M.state.active = message
     M.state.text = text
